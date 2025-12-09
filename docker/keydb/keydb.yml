@@ -1,0 +1,38 @@
+services:
+  keydb:
+    image: eqalpha/keydb:latest
+    container_name: interview_keydb
+    env_file: ../../.env
+    volumes:
+      - keydb_data:/data
+      - ./config/keydb.conf:/etc/keydb/keydb.conf
+    ports:
+      - "${KEYDB_PORT:-6379}:6379"
+    restart: unless-stopped
+    command: keydb-server /etc/keydb/keydb.conf --requirepass "${KEYDB_PASSWORD}"
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "keydb-cli",
+          "-a",
+          "${KEYDB_PASSWORD}",
+          "ping",
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+    labels:
+      com.interview.description: "KeyDB cache for Interviews"
+      com.interview.environment: "development"
+      com.interview.service: "cache"
+
+volumes:
+  keydb_data:
+    name: interview_keydb_data

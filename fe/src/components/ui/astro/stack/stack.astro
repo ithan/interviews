@@ -1,0 +1,36 @@
+---
+import type { HTMLAttributes } from 'astro/types';
+import './stack.scss';
+
+type StackGap = '0' | '1' | '2' | '3' | '4' | '5' | '6' | '8' | '10' | '12' | '16';
+type StackAlign = 'start' | 'center' | 'end' | 'stretch';
+
+interface Props extends HTMLAttributes<'div'> {
+  gap?: StackGap;
+  align?: StackAlign;
+  direction?: 'vertical' | 'horizontal';
+}
+
+const { 
+  gap = '4', 
+  align = 'stretch',
+  direction = 'vertical',
+  class: className, 
+  ...rest 
+} = Astro.props;
+---
+
+<div 
+  class:list={[
+    'stack', 
+    `stack--gap-${gap}`,
+    `stack--align-${align}`,
+    `stack--${direction}`,
+    className
+  ]} 
+  data-slot="stack"
+  {...rest}
+>
+  <slot />
+</div>
+

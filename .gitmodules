@@ -1,0 +1,12 @@
+[submodule "extensions/prusa-editorjs"]
+	path = extensions/prusa-editorjs
+	url = https://gitlab.com/prusa3d-platform/webdev-core/packages/editorjs/editorjs
+[submodule "extensions/prusalator-modal"]
+	path = extensions/prusalator-modal
+	url = https://gitlab.com/prusa3d-platform/webdev-core/packages/prusalator-modal
+[submodule "extensions/prusalator-sync"]
+	path = extensions/prusalator-sync
+	url = https://gitlab.com/prusa3d-platform/webdev-core/packages/prusalator-sync
+[submodule "extensions/prusalator-webhook"]
+	path = extensions/prusalator-webhook
+	url = https://gitlab.com/prusa3d-platform/webdev-core/packages/prusalator-webhook

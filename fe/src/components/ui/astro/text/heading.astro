@@ -1,0 +1,39 @@
+---
+import type { HTMLAttributes } from 'astro/types';
+
+type HeadingLevel = 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6';
+type HeadingSize = '6xl' | '5xl' | '4xl' | '3xl' | '2xl' | 'xl' | 'lg';
+
+interface Props extends HTMLAttributes<'h1'> {
+  as?: HeadingLevel;
+  size?: HeadingSize;
+}
+
+const { 
+  as: Element = 'h2', 
+  size,
+  class: className, 
+  ...rest 
+} = Astro.props;
+
+// Default sizes based on heading level
+const defaultSizes: Record<HeadingLevel, HeadingSize> = {
+  h1: '5xl',
+  h2: '4xl',
+  h3: '3xl',
+  h4: '2xl',
+  h5: 'xl',
+  h6: 'lg',
+};
+
+const resolvedSize = size ?? defaultSizes[Element];
+---
+
+<Element 
+  class:list={['heading', `heading--${resolvedSize}`, className]} 
+  data-slot="heading"
+  {...rest}
+>
+  <slot />
+</Element>
+

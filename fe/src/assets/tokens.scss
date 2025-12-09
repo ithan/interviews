@@ -1,0 +1,402 @@
+// ============================================================================
+// DESIGN TOKENS - Blog Design System
+// ============================================================================
+// OKLCH-based color system with semantic tokens for BEM components
+// Usage: var(--token-name) in component styles
+
+:root {
+  // ==========================================================================
+  // COLOR PRIMITIVES (OKLCH)
+  // ==========================================================================
+  // Format: oklch(lightness chroma hue)
+  // Lightness: 0-1, Chroma: 0-0.4, Hue: 0-360
+  
+  // Ink (Near-black with subtle warmth)
+  --color-ink-950: oklch(0.13 0.01 285);
+  --color-ink-900: oklch(0.18 0.01 285);
+  --color-ink-800: oklch(0.25 0.01 285);
+  --color-ink-700: oklch(0.35 0.01 285);
+  --color-ink-600: oklch(0.45 0.01 285);
+  --color-ink-500: oklch(0.55 0.01 285);
+  --color-ink-400: oklch(0.65 0.01 285);
+  --color-ink-300: oklch(0.75 0.01 285);
+  --color-ink-200: oklch(0.85 0.01 285);
+  --color-ink-100: oklch(0.92 0.005 285);
+  --color-ink-50: oklch(0.97 0.002 285);
+  
+  // Paper (Warm whites and creams)
+  --color-paper-50: oklch(0.995 0.002 90);
+  --color-paper-100: oklch(0.98 0.005 85);
+  --color-paper-200: oklch(0.96 0.008 80);
+  --color-paper-300: oklch(0.93 0.01 75);
+  
+  // Accent - Vermillion (Warm, energetic red-orange)
+  --color-accent-50: oklch(0.97 0.02 25);
+  --color-accent-100: oklch(0.93 0.05 25);
+  --color-accent-200: oklch(0.85 0.1 25);
+  --color-accent-300: oklch(0.75 0.15 25);
+  --color-accent-400: oklch(0.65 0.19 25);
+  --color-accent-500: oklch(0.58 0.22 25);
+  --color-accent-600: oklch(0.50 0.2 25);
+  --color-accent-700: oklch(0.42 0.17 25);
+  --color-accent-800: oklch(0.35 0.14 25);
+  --color-accent-900: oklch(0.28 0.1 25);
+  
+  // Secondary - Teal (Cool, calming complement)
+  --color-secondary-50: oklch(0.97 0.02 185);
+  --color-secondary-100: oklch(0.93 0.04 185);
+  --color-secondary-200: oklch(0.85 0.08 185);
+  --color-secondary-300: oklch(0.75 0.12 185);
+  --color-secondary-400: oklch(0.65 0.14 185);
+  --color-secondary-500: oklch(0.55 0.13 185);
+  --color-secondary-600: oklch(0.45 0.11 185);
+  --color-secondary-700: oklch(0.38 0.09 185);
+  --color-secondary-800: oklch(0.30 0.07 185);
+  --color-secondary-900: oklch(0.22 0.05 185);
+  
+  // Success - Jade
+  --color-success-50: oklch(0.97 0.02 155);
+  --color-success-100: oklch(0.92 0.05 155);
+  --color-success-500: oklch(0.60 0.15 155);
+  --color-success-600: oklch(0.52 0.14 155);
+  --color-success-700: oklch(0.44 0.12 155);
+  
+  // Warning - Amber
+  --color-warning-50: oklch(0.97 0.03 85);
+  --color-warning-100: oklch(0.93 0.08 85);
+  --color-warning-500: oklch(0.75 0.18 85);
+  --color-warning-600: oklch(0.65 0.17 85);
+  --color-warning-700: oklch(0.55 0.15 85);
+  
+  // Error - Crimson
+  --color-error-50: oklch(0.97 0.02 15);
+  --color-error-100: oklch(0.92 0.05 15);
+  --color-error-500: oklch(0.55 0.2 15);
+  --color-error-600: oklch(0.48 0.19 15);
+  --color-error-700: oklch(0.40 0.16 15);
+  
+  // Info - Sapphire
+  --color-info-50: oklch(0.97 0.02 250);
+  --color-info-100: oklch(0.92 0.04 250);
+  --color-info-500: oklch(0.55 0.15 250);
+  --color-info-600: oklch(0.48 0.14 250);
+  --color-info-700: oklch(0.40 0.12 250);
+  
+  // Pure
+  --color-white: oklch(1 0 0);
+  --color-black: oklch(0 0 0);
+  
+  // Alpha overlays
+  --color-overlay-light: oklch(1 0 0 / 0.8);
+  --color-overlay-dark: oklch(0.15 0.01 285 / 0.7);
+  --color-scrim: oklch(0 0 0 / 0.5);
+  
+  // ==========================================================================
+  // SEMANTIC COLOR TOKENS
+  // ==========================================================================
+  
+  // Surfaces
+  --surface-page: var(--color-paper-50);
+  --surface-card: var(--color-white);
+  --surface-elevated: var(--color-white);
+  --surface-sunken: var(--color-paper-200);
+  --surface-overlay: var(--color-overlay-light);
+  
+  // Text
+  --text-primary: var(--color-ink-900);
+  --text-secondary: var(--color-ink-600);
+  --text-tertiary: var(--color-ink-400);
+  --text-disabled: var(--color-ink-300);
+  --text-inverse: var(--color-paper-50);
+  --text-link: var(--color-accent-500);
+  --text-link-hover: var(--color-accent-600);
+  --text-link-visited: var(--color-secondary-600);
+  
+  // Borders
+  --border-default: var(--color-ink-100);
+  --border-subtle: var(--color-ink-50);
+  --border-strong: var(--color-ink-200);
+  --border-accent: var(--color-accent-500);
+  --border-focus: var(--color-accent-400);
+  
+  // Interactive states
+  --interactive-default: var(--color-accent-500);
+  --interactive-hover: var(--color-accent-600);
+  --interactive-active: var(--color-accent-700);
+  --interactive-disabled: var(--color-ink-200);
+  
+  // ==========================================================================
+  // TYPOGRAPHY
+  // ==========================================================================
+  
+  // Font stacks
+  --font-sans: 'Instrument Sans', 'DM Sans', system-ui, -apple-system, sans-serif;
+  --font-serif: 'Newsreader', 'Source Serif 4', Georgia, 'Times New Roman', serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', 'SF Mono', monospace;
+  
+  // Font sizes (fluid with clamp)
+  --text-xs: clamp(0.7rem, 0.65rem + 0.25vw, 0.75rem);
+  --text-sm: clamp(0.8rem, 0.75rem + 0.25vw, 0.875rem);
+  --text-base: clamp(0.95rem, 0.9rem + 0.25vw, 1rem);
+  --text-lg: clamp(1.05rem, 1rem + 0.25vw, 1.125rem);
+  --text-xl: clamp(1.15rem, 1.1rem + 0.3vw, 1.25rem);
+  --text-2xl: clamp(1.4rem, 1.25rem + 0.5vw, 1.5rem);
+  --text-3xl: clamp(1.7rem, 1.5rem + 0.75vw, 1.875rem);
+  --text-4xl: clamp(2rem, 1.75rem + 1vw, 2.25rem);
+  --text-5xl: clamp(2.5rem, 2rem + 1.5vw, 3rem);
+  --text-6xl: clamp(3rem, 2.5rem + 2vw, 3.75rem);
+  
+  // Font weights
+  --font-thin: 100;
+  --font-light: 300;
+  --font-regular: 400;
+  --font-medium: 500;
+  --font-semibold: 600;
+  --font-bold: 700;
+  --font-black: 900;
+  
+  // Line heights
+  --leading-none: 1;
+  --leading-tight: 1.2;
+  --leading-snug: 1.35;
+  --leading-normal: 1.5;
+  --leading-relaxed: 1.65;
+  --leading-loose: 1.8;
+  --leading-prose: 1.75;
+  
+  // Letter spacing
+  --tracking-tighter: -0.03em;
+  --tracking-tight: -0.015em;
+  --tracking-normal: 0;
+  --tracking-wide: 0.015em;
+  --tracking-wider: 0.03em;
+  --tracking-widest: 0.08em;
+  
+  // ==========================================================================
+  // SPACING (8px base grid)
+  // ==========================================================================
+  
+  --space-0: 0;
+  --space-px: 1px;
+  --space-0-5: 0.125rem;  // 2px
+  --space-1: 0.25rem;     // 4px
+  --space-1-5: 0.375rem;  // 6px
+  --space-2: 0.5rem;      // 8px
+  --space-2-5: 0.625rem;  // 10px
+  --space-3: 0.75rem;     // 12px
+  --space-4: 1rem;        // 16px
+  --space-5: 1.25rem;     // 20px
+  --space-6: 1.5rem;      // 24px
+  --space-8: 2rem;        // 32px
+  --space-10: 2.5rem;     // 40px
+  --space-12: 3rem;       // 48px
+  --space-16: 4rem;       // 64px
+  --space-20: 5rem;       // 80px
+  --space-24: 6rem;       // 96px
+  --space-32: 8rem;       // 128px
+  --space-40: 10rem;      // 160px
+  
+  // Content widths
+  --width-prose: 65ch;
+  --width-content: 720px;
+  --width-wide: 1024px;
+  --width-full: 1280px;
+  --width-max: 1440px;
+  
+  // ==========================================================================
+  // BORDER RADIUS
+  // ==========================================================================
+  
+  --radius-none: 0;
+  --radius-xs: 2px;
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 8px;
+  --radius-xl: 12px;
+  --radius-2xl: 16px;
+  --radius-3xl: 24px;
+  --radius-full: 9999px;
+  
+  // ==========================================================================
+  // SHADOWS
+  // ==========================================================================
+  
+  --shadow-xs: 0 1px 2px oklch(0.2 0.01 285 / 0.06);
+  --shadow-sm: 
+    0 1px 2px oklch(0.2 0.01 285 / 0.04),
+    0 2px 4px oklch(0.2 0.01 285 / 0.04);
+  --shadow-md: 
+    0 2px 4px oklch(0.2 0.01 285 / 0.03),
+    0 4px 8px oklch(0.2 0.01 285 / 0.06);
+  --shadow-lg: 
+    0 4px 8px oklch(0.2 0.01 285 / 0.03),
+    0 8px 16px oklch(0.2 0.01 285 / 0.06),
+    0 16px 32px oklch(0.2 0.01 285 / 0.04);
+  --shadow-xl: 
+    0 8px 16px oklch(0.2 0.01 285 / 0.04),
+    0 16px 32px oklch(0.2 0.01 285 / 0.08),
+    0 32px 64px oklch(0.2 0.01 285 / 0.06);
+  --shadow-inner: inset 0 2px 4px oklch(0.2 0.01 285 / 0.08);
+  --shadow-none: none;
+  
+  // Colored shadows (for buttons, cards)
+  --shadow-accent: 0 4px 14px oklch(0.58 0.22 25 / 0.25);
+  --shadow-accent-lg: 0 8px 24px oklch(0.58 0.22 25 / 0.3);
+  
+  // ==========================================================================
+  // TRANSITIONS & ANIMATIONS
+  // ==========================================================================
+  
+  // Durations
+  --duration-instant: 0ms;
+  --duration-75: 75ms;
+  --duration-100: 100ms;
+  --duration-150: 150ms;
+  --duration-200: 200ms;
+  --duration-300: 300ms;
+  --duration-500: 500ms;
+  --duration-700: 700ms;
+  --duration-1000: 1000ms;
+  
+  // Easings
+  --ease-linear: linear;
+  --ease-in: cubic-bezier(0.4, 0, 1, 1);
+  --ease-out: cubic-bezier(0, 0, 0.2, 1);
+  --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-bounce: cubic-bezier(0.68, -0.6, 0.32, 1.6);
+  --ease-elastic: cubic-bezier(0.5, -0.5, 0.1, 1.5);
+  --ease-spring: cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  
+  // Precomposed transitions
+  --transition-fast: var(--duration-150) var(--ease-out);
+  --transition-base: var(--duration-200) var(--ease-out);
+  --transition-slow: var(--duration-300) var(--ease-out);
+  --transition-colors: color var(--transition-fast), background-color var(--transition-fast), border-color var(--transition-fast);
+  --transition-shadow: box-shadow var(--transition-base);
+  --transition-transform: transform var(--transition-base);
+  --transition-opacity: opacity var(--transition-fast);
+  
+  // ==========================================================================
+  // Z-INDEX SCALE
+  // ==========================================================================
+  
+  --z-below: -1;
+  --z-base: 0;
+  --z-raised: 1;
+  --z-dropdown: 100;
+  --z-sticky: 200;
+  --z-overlay: 300;
+  --z-modal: 400;
+  --z-popover: 500;
+  --z-toast: 600;
+  --z-tooltip: 700;
+  --z-max: 9999;
+  
+  // ==========================================================================
+  // FOCUS & ACCESSIBILITY
+  // ==========================================================================
+  
+  --focus-ring-width: 2px;
+  --focus-ring-offset: 2px;
+  --focus-ring-color: var(--color-accent-400);
+  --focus-ring: 
+    0 0 0 var(--focus-ring-offset) var(--surface-page),
+    0 0 0 calc(var(--focus-ring-width) + var(--focus-ring-offset)) var(--focus-ring-color);
+  
+  // ==========================================================================
+  // COMPONENT-SPECIFIC TOKENS (BEM ready)
+  // ==========================================================================
+  
+  // Button
+  --btn-padding-x: var(--space-4);
+  --btn-padding-y: var(--space-2-5);
+  --btn-radius: var(--radius-md);
+  --btn-font-weight: var(--font-medium);
+  --btn-font-size: var(--text-sm);
+  
+  // Card
+  --card-padding: var(--space-6);
+  --card-radius: var(--radius-xl);
+  --card-shadow: var(--shadow-sm);
+  --card-shadow-hover: var(--shadow-md);
+  --card-border: 1px solid var(--border-subtle);
+  
+  // Input
+  --input-padding-x: var(--space-3);
+  --input-padding-y: var(--space-2-5);
+  --input-radius: var(--radius-md);
+  --input-border: 1px solid var(--border-default);
+  --input-border-focus: 1px solid var(--border-focus);
+  --input-font-size: var(--text-base);
+  
+  // Article/Post
+  --article-max-width: var(--width-prose);
+  --article-spacing: var(--space-6);
+  --article-font-size: var(--text-lg);
+  --article-line-height: var(--leading-prose);
+  
+  // Navigation
+  --nav-height: 4rem;
+  --nav-padding-x: var(--space-6);
+  --nav-link-padding: var(--space-2) var(--space-3);
+  
+  // Tag/Badge
+  --tag-padding-x: var(--space-2-5);
+  --tag-padding-y: var(--space-1);
+  --tag-radius: var(--radius-full);
+  --tag-font-size: var(--text-xs);
+  --tag-font-weight: var(--font-medium);
+}
+
+// ==========================================================================
+// DARK MODE OVERRIDES
+// ==========================================================================
+
+[data-theme="dark"],
+.theme--dark {
+  // Surfaces
+  --surface-page: var(--color-ink-950);
+  --surface-card: var(--color-ink-900);
+  --surface-elevated: var(--color-ink-800);
+  --surface-sunken: var(--color-ink-950);
+  --surface-overlay: var(--color-overlay-dark);
+  
+  // Text
+  --text-primary: var(--color-paper-50);
+  --text-secondary: var(--color-ink-300);
+  --text-tertiary: var(--color-ink-400);
+  --text-disabled: var(--color-ink-600);
+  --text-link: var(--color-accent-400);
+  --text-link-hover: var(--color-accent-300);
+  
+  // Borders
+  --border-default: var(--color-ink-700);
+  --border-subtle: var(--color-ink-800);
+  --border-strong: var(--color-ink-600);
+  
+  // Shadows (more prominent in dark mode)
+  --shadow-sm: 
+    0 1px 2px oklch(0 0 0 / 0.3),
+    0 2px 4px oklch(0 0 0 / 0.2);
+  --shadow-md: 
+    0 2px 4px oklch(0 0 0 / 0.25),
+    0 4px 8px oklch(0 0 0 / 0.3);
+  --shadow-lg: 
+    0 4px 8px oklch(0 0 0 / 0.2),
+    0 8px 16px oklch(0 0 0 / 0.35),
+    0 16px 32px oklch(0 0 0 / 0.25);
+    
+  // Card adjustments
+  --card-border: 1px solid var(--border-subtle);
+}
+
+// ==========================================================================
+// MEDIA QUERY HELPERS (SCSS variables for breakpoints)
+// ==========================================================================
+
+$breakpoint-xs: 480px;
+$breakpoint-sm: 640px;
+$breakpoint-md: 768px;
+$breakpoint-lg: 1024px;
+$breakpoint-xl: 1280px;
+$breakpoint-2xl: 1536px;

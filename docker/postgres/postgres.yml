@@ -1,0 +1,46 @@
+services:
+  postgres:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: interview_postgres
+    env_file:
+      - ../../.env
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      # Additional PostgreSQL configurations
+      POSTGRES_INITDB_ARGS: "--data-checksums"
+      PGDATA: /var/lib/postgresql/data/pgdata
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./config/postgresql.conf:/etc/postgresql/postgresql.conf
+      - ./config/init:/docker-entrypoint-initdb.d
+    ports:
+      - "${POSTGRES_PORT}:5432"
+    restart: unless-stopped
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}",
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+    command: ["postgres", "-c", "config_file=/etc/postgresql/postgresql.conf"]
+    labels:
+      com.interview.description: "PostgreSQL database for Interviews"
+      com.interview.environment: "development"
+      com.interview.service: "database"
+
+volumes:
+  postgres_data:
+    name: interview_postgres_data

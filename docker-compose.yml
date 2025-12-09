@@ -1,0 +1,6 @@
+include:
+  - ./docker/postgres/postgres.yml
+  - ./docker/keydb/keydb.yml
+  - ./docker/minio/minio.yml
+  - ./docker/mailhog/mailhog.yml
+  - ./docker/directus/directus.yml

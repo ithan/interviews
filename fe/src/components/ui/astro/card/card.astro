@@ -1,0 +1,19 @@
+---
+import type { HTMLAttributes } from 'astro/types';
+import './card.scss';
+
+interface Props extends HTMLAttributes<'article'> {
+  variant?: 'default' | 'outlined' | 'elevated';
+}
+
+const { variant = 'default', class: className, ...rest } = Astro.props;
+---
+
+<article 
+  class:list={['card', `card--${variant}`, className]} 
+  data-slot="card"
+  {...rest}
+>
+  <slot />
+</article>
+

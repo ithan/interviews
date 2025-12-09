@@ -1,0 +1,39 @@
+services:
+  directus:
+    build:
+      context: ../../
+      dockerfile: Dockerfile
+    container_name: interview_directus
+    env_file:
+      - ../../.env
+    volumes:
+      - directus_uploads:/directus/uploads
+    ports:
+      - "${PORT:-8055}:8055"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      keydb:
+        condition: service_healthy
+      minio:
+        condition: service_healthy
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8055/server/ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+    labels:
+      com.interview.description: "Directus CMS for Interviews"
+      com.interview.environment: "development"
+      com.interview.service: "cms"
+
+volumes:
+  directus_uploads:
+    name: interview_uploads_data

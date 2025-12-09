@@ -1,0 +1,21 @@
+---
+import type { HTMLAttributes } from 'astro/types';
+
+interface Props extends HTMLAttributes<'pre'> {
+  language?: string;
+  filename?: string;
+}
+
+const { language, filename, class: className, ...rest } = Astro.props;
+---
+
+<figure class:list={['code-block', className]} data-slot="code-block">
+  {filename && (
+    <figcaption class="code-block__header">
+      <span class="code-block__filename">{filename}</span>
+      {language && <span class="code-block__language">{language}</span>}
+    </figcaption>
+  )}
+  <pre class="code-block__pre" data-language={language} {...rest}><slot /></pre>
+</figure>
+

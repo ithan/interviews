@@ -1,0 +1,524 @@
+// ============================================================================
+// MODERN CSS RESET LAYER - 2025 EDITION
+// ============================================================================
+// Complements existing design tokens and font setup
+// Focuses on foundational resets without duplicating existing utilities
+
+@layer reset {
+  
+    // ============================================================================
+    // UNIVERSAL BOX SIZING & FOUNDATIONAL RESETS
+    // ============================================================================
+    
+    // Yeh, no box-sizing here, in 2025 it probably does more harm than good
+    
+    // Remove default margins for better control
+    * {
+      margin: 0;
+    }
+    
+    // Alternative margin reset using logical properties (progressive enhancement)
+    @supports (margin-block: 0) {
+      body, p, 
+      figure, blockquote, dl, dd, ul, ol {
+        margin-block-end: 0;
+      }
+    }
+    
+    // ============================================================================
+    // HTML ROOT ENHANCEMENTS (building on your existing setup)
+    // ============================================================================
+    
+    html {
+      // Prevent font size inflation on mobile devices
+      -moz-text-size-adjust: none;
+      -webkit-text-size-adjust: none;
+      text-size-adjust: none;
+      
+      // Modern scrolling behavior (respects user preferences)
+      scroll-behavior: smooth;
+      
+      // Override if user prefers reduced motion (already handled in your code)
+      @media (prefers-reduced-motion: reduce) {
+        scroll-behavior: auto;
+      }
+      
+      // Progressive enhancement: modern text features
+      @supports (font-optical-sizing: auto) {
+        font-optical-sizing: auto;
+      }
+      
+      // Enable newer CSS animations to keywords like 'auto', 'fit-content'
+      @supports (interpolate-size: allow-keywords) {
+        interpolate-size: allow-keywords;
+      }
+    }
+    
+    // ============================================================================
+    // BODY ENHANCEMENTS (complementing your existing styles)
+    // ============================================================================
+    
+    body {
+      // Accessible line height (WCAG recommends 1.5 minimum)
+      line-height: var(--line-height-base, 1.5);
+      
+      // Better hyphenation and text wrapping
+      @supports (hyphenate-character: auto) {
+        hyphenate-character: auto;
+        hyphens: auto;
+      }
+      
+      // Modern text spacing
+      @supports (text-spacing-trim: auto) {
+        text-spacing-trim: auto;
+      }
+      
+      // Minimum height for full-height layouts
+      min-height: 100vh;
+    }
+    
+    // ============================================================================
+    // TYPOGRAPHY ENHANCEMENTS (using your existing tokens)
+    // ============================================================================
+    
+    // Headings: shorter line-height for better visual hierarchy
+    h1, h2, h3, h4, h5, h6 {    
+      // Modern text balancing for prettier headings
+      @supports (text-wrap: balance) {
+        text-wrap: balance;
+      }
+      
+      // Fallback for older browsers - prevent orphans
+      @supports not (text-wrap: balance) {
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+      }
+      
+      // Better font rendering for headings (uses your existing fonts)
+      @supports (text-rendering: optimizeLegibility) {
+        text-rendering: optimizeLegibility;
+      }
+    }
+    
+    // Paragraphs: better text wrapping
+    p {
+      // Modern text wrapping algorithm for prettier paragraphs
+      @supports (text-wrap: pretty) {
+        text-wrap: pretty;
+      }
+      
+      // Prevent text overflow
+      overflow-wrap: break-word;
+      word-wrap: break-word;
+    }
+    
+    // All text elements: prevent overflow
+    h1, h2, h3, h4, h5, h6, p, 
+    blockquote, pre, code {
+      overflow-wrap: break-word;
+    }
+    
+    // ============================================================================
+    // LIST IMPROVEMENTS
+    // ============================================================================
+    
+    // Lists: remove default styling only when role="list" is present
+    // This preserves accessibility while allowing custom styling
+    ul[role="list"], 
+    ol[role="list"] {
+      list-style: none;
+      
+      // Use logical properties with fallback
+      @supports (padding-inline-start: 0) {
+        padding-inline-start: 0;
+      }
+      
+      @supports not (padding-inline-start: 0) {
+        padding-left: 0;
+        
+        // RTL support
+        [dir="rtl"] & {
+          padding-left: unset;
+          padding-right: 0;
+        }
+      }
+    }
+    
+    // ============================================================================
+    // LINK IMPROVEMENTS
+    // ============================================================================
+    
+    // Links: improve accessibility and readability
+    a:not([class]) {
+      // Skip ink over descenders for better readability
+      text-decoration-skip-ink: auto;
+      
+      // Use current color as default (inherits from parent)
+      color: currentColor;
+      
+      // Better underline positioning
+      @supports (text-underline-position: under) {
+        text-underline-position: under;
+      }
+      
+      // Modern underline styling
+      @supports (text-decoration-thickness: from-font) {
+        text-decoration-thickness: from-font;
+      }
+    }
+    
+    // ============================================================================
+    // FOCUS MANAGEMENT (using your existing focus tokens)
+    // ============================================================================
+    
+    // Better focus styles for interactive elements
+    a:focus-visible,
+    button:focus-visible,
+    input:focus-visible,
+    textarea:focus-visible,
+    select:focus-visible {
+      outline: var(--focus-ring-width, 2px) solid var(--focus-ring-color);
+      outline-offset: var(--focus-ring-offset, 2px);
+    }
+    
+    // Fallback for browsers without :focus-visible support
+    @supports not selector(:focus-visible) {
+      a:focus,
+      button:focus,
+      input:focus,
+      textarea:focus,
+      select:focus {
+        outline: var(--focus-ring-width, 2px) solid var(--focus-ring-color);
+        outline-offset: var(--focus-ring-offset, 2px);
+      }
+    }
+    
+    // ============================================================================
+    // MEDIA ELEMENTS
+    // ============================================================================
+    
+    // Make media elements responsive and block-level by default
+    img, 
+    picture, 
+    video, 
+    canvas, 
+    svg {
+      display: block;
+      max-width: 100%;
+    }
+    
+    // Improve image loading
+    img {
+      height: auto;
+    }
+    
+    // SVG improvements
+    svg {
+      max-height: 100%;
+      
+      // Remove default focusability in IE
+      &:not(:focus) {
+        overflow: hidden;
+      }
+    }
+    
+    // Better video defaults
+    video {
+      object-fit: cover;
+      
+      // Modern aspect ratio support
+      @supports (aspect-ratio: 16/9) {
+        aspect-ratio: attr(width) / attr(height);
+      }
+    }
+    
+    // ============================================================================
+    // FORM ELEMENTS
+    // ============================================================================
+    
+    // Form elements inherit typography (using your font tokens)
+    input, 
+    button, 
+    textarea, 
+    select {
+      font: inherit;
+      color: inherit;
+    }
+    
+    // Button improvements
+    button,
+    [type="button"],
+    [type="reset"],
+    [type="submit"] {
+      // Remove default appearance for better custom styling
+      -webkit-appearance: none;
+      appearance: none;
+      
+      // Better button defaults
+      background-color: transparent;
+      border: 0;
+      cursor: pointer;
+      
+      // Improve touch targets (44px minimum for accessibility)
+      min-height: 44px;
+      min-width: 44px;
+      
+      // Better touch behavior
+      touch-action: manipulation;
+    }
+    
+    // Textareas: ensure reasonable minimum size
+    textarea:not([rows]) {
+      min-height: 10em;
+      resize: vertical;
+    }
+    
+    // Modern input improvements
+    textarea {
+      @supports (field-sizing: content) {
+        field-sizing: content;
+      }
+    }
+    
+    // Remove default fieldset styling
+    fieldset {
+      border: 0;
+      margin: 0;
+      padding: 0;
+    }
+    
+    // Legend improvements
+    legend {
+      padding: 0;
+      margin-bottom: var(--spacing-8, 0.5rem);
+      font-weight: var(--font-weight-600, 600);
+    }
+    
+    // ============================================================================
+    // TABLE IMPROVEMENTS
+    // ============================================================================
+    
+    table {
+      border-collapse: collapse;
+      border-spacing: 0;
+    }
+    
+    th, td {
+      text-align: start;
+      vertical-align: top;
+      padding: var(--spacing-8, 0.5rem);
+    }
+    
+    th {
+      font-weight: var(--font-weight-600, 600);
+    }
+    
+    // ============================================================================
+    // INTERACTIVE ELEMENTS
+    // ============================================================================
+    
+    // Improve summary/details behavior
+    summary {
+      cursor: pointer;
+      list-style: none;
+      
+      // Remove default marker
+      &::-webkit-details-marker {
+        display: none;
+      }
+    }
+    
+    // Better dialog defaults
+    @supports selector(dialog) {
+      dialog {
+        border: 0;
+        padding: 0;
+        max-width: calc(100vw - 2rem);
+        max-height: calc(100vh - 2rem);
+        
+        // Center dialog
+        &::backdrop {
+          background-color: var(--color-backdrop, rgba(0, 0, 0, 0.3));
+          backdrop-filter: blur(4px);
+        }
+        
+        &:not([open]) {
+          display: none;
+        }
+      }
+    }
+    
+    // ============================================================================
+    // SCROLLING IMPROVEMENTS (using your existing z-index tokens)
+    // ============================================================================
+    
+    // Anchor scrolling improvements
+    :target {
+      // Add space above anchored elements
+      @supports (scroll-margin-block-start: 2rem) {
+        scroll-margin-block-start: var(--spacing-32, 2rem);
+      }
+      
+      @supports not (scroll-margin-block-start: 2rem) {
+        scroll-margin-top: var(--spacing-32, 2rem);
+      }
+    }
+    
+    // Better scrollbar styling (webkit browsers)
+    @supports selector(::-webkit-scrollbar) {
+      ::-webkit-scrollbar {
+        width: 0.75rem;
+        height: 0.75rem;
+      }
+      
+      ::-webkit-scrollbar-track {
+        background: var(--color-ink-100);
+      }
+      
+      ::-webkit-scrollbar-thumb {
+        background: var(--color-ink-400);
+        border-radius: var(--radius-sm);
+        
+        &:hover {
+          background: var(--color-ink-500);
+        }
+      }
+    }
+    
+    // Modern scrollbar styling (Firefox and future browsers)
+    @supports (scrollbar-width: thin) {
+      html {
+        scrollbar-width: thin;
+        scrollbar-color: var(--color-ink-400) var(--color-ink-100);
+      }
+    }
+    
+    // ============================================================================
+    // HIGH CONTRAST & COLOR SCHEME SUPPORT
+    // ============================================================================
+    
+    // Improve accessibility in high contrast mode
+    @media (prefers-contrast: high) {
+      // Ensure borders are visible in high contrast
+      button, 
+      input, 
+      textarea, 
+      select {
+        border: 1px solid;
+      }
+      
+      // Improve focus visibility
+      :focus-visible {
+        outline: 3px solid;
+        outline-offset: 2px;
+      }
+    }
+    
+    
+    // ============================================================================
+    // PRINT STYLES
+    // ============================================================================
+    
+    @media print {
+      *,
+      *::before,
+      *::after {
+        background: transparent !important;
+        color: black !important;
+        box-shadow: none !important;
+      }
+      
+      a,
+      a:visited {
+        text-decoration: underline;
+      }
+      
+      // Show link URLs (optional - can be commented out)
+      a[href]:after {
+        content: " (" attr(href) ")";
+        font-size: 0.8em;
+      }
+      
+      a[href^="#"]:after,
+      a[href^="javascript:"]:after {
+        content: "";
+      }
+      
+      h1, h2, h3, h4, h5, h6 {
+        break-after: avoid;
+        page-break-after: avoid;
+      }
+      
+      blockquote,
+      pre,
+      img,
+      tr,
+      canvas {
+        break-inside: avoid;
+        page-break-inside: avoid;
+      }
+    }
+    
+    // ============================================================================
+    // MODERN LAYOUT FOUNDATIONS
+    // ============================================================================
+    
+    // Create root stacking context (complementing your existing z-index setup)
+    #root, 
+    #__next,
+    #app {
+      isolation: isolate;
+    }
+    
+    // Improve text selection (using your color tokens)
+    ::selection {
+      background-color: var(--color-accent-500);
+      color: var(--color-white);
+      text-shadow: none;
+    }
+    
+    ::-moz-selection {
+      background-color: var(--color-accent-500);
+      color: var(--color-white);
+      text-shadow: none;
+    }
+    
+    // ============================================================================
+    // PROGRESSIVE ENHANCEMENT FEATURES
+    // ============================================================================
+    
+    // Container query support preparation
+    @supports (container-type: inline-size) {
+      .container {
+        container-type: inline-size;
+      }
+    }
+    
+    // Modern focus management with :focus-within
+    @supports selector(:focus-within) {
+      .form-group:focus-within {
+        outline: 2px solid var(--color-accent-500);
+        outline-offset: 2px;
+      }
+    }
+    
+    // Modern CSS nesting support indicator
+    @supports (color: color-mix(in srgb, red 50%, blue)) {
+      :root {
+        --color-mix-supported: true;
+      }
+    }
+    
+    // ============================================================================
+    // VIEW TRANSITIONS (complementing your existing setup)
+    // ============================================================================
+    
+    // Enhance your existing view transitions
+    @supports (view-transition-name: none) {
+      ::view-transition-old(root),
+      ::view-transition-new(root) {
+        animation-duration: var(--duration-medium, 300ms);
+        animation-timing-function: var(--ease-smooth, ease-out);
+      }
+    }
+  }

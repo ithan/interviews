@@ -1,0 +1,19 @@
+---
+import type { HTMLAttributes } from 'astro/types';
+import './code.scss';
+
+interface Props extends HTMLAttributes<'code'> {
+  inline?: boolean;
+}
+
+const { inline = false, class: className, ...rest } = Astro.props;
+---
+
+<code 
+  class:list={['code', inline && 'code--inline', className]} 
+  data-slot="code"
+  {...rest}
+>
+  <slot />
+</code>
+

@@ -1,0 +1,17 @@
+.layout {
+  min-block-size: 100dvh;
+  background: var(--surface-page);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  font-size: var(--text-base);
+  line-height: var(--leading-normal);
+  
+  &__main {
+    padding-block: var(--space-12);
+    
+    @media (min-width: 768px) {
+      padding-block: var(--space-16);
+    }
+  }
+}
+

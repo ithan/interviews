@@ -1,0 +1,35 @@
+---
+import type { HTMLAttributes } from 'astro/types';
+import './container.scss';
+
+type ContainerSize = 'prose' | 'content' | 'wide' | 'full' | 'max';
+
+interface Props extends HTMLAttributes<'div'> {
+  size?: ContainerSize;
+  center?: boolean;
+  padding?: boolean;
+}
+
+const { 
+  size = 'content', 
+  center = true,
+  padding = true,
+  class: className, 
+  ...rest 
+} = Astro.props;
+---
+
+<div 
+  class:list={[
+    'container', 
+    `container--${size}`,
+    center && 'container--center',
+    padding && 'container--padded',
+    className
+  ]} 
+  data-slot="container"
+  {...rest}
+>
+  <slot />
+</div>
+

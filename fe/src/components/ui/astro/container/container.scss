@@ -1,0 +1,23 @@
+.container {
+  inline-size: 100%;
+  
+  &--center {
+    margin-inline: auto;
+  }
+  
+  &--padded {
+    padding-inline: var(--space-4);
+    
+    @media (min-width: 768px) {
+      padding-inline: var(--space-6);
+    }
+  }
+  
+  // Sizes
+  &--prose { max-inline-size: var(--width-prose); }
+  &--content { max-inline-size: var(--width-content); }
+  &--wide { max-inline-size: var(--width-wide); }
+  &--full { max-inline-size: var(--width-full); }
+  &--max { max-inline-size: var(--width-max); }
+}
+

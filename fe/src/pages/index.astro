@@ -1,0 +1,196 @@
+---
+import Layout from '@/components/layouts/layout.astro';
+import { Container } from '@/components/ui/astro/container';
+import { Card, CardHeader, CardContent, CardFooter } from '@/components/ui/astro/card';
+import { Text, Heading } from '@/components/ui/astro/text';
+import { Stack } from '@/components/ui/astro/stack';
+import { Badge } from '@/components/ui/astro/badge';
+import { Code, CodeBlock } from '@/components/ui/astro/code';
+
+const queryExample = `{
+  filter: {
+    translations: {
+      slug: { _eq: slug },
+      languages_code: { _eq: lang },
+    },
+  },
+  fields: ['id', 'translations.title', 'translations.content'],
+  deep: {
+    translations: {
+      _filter: {
+        slug: { _eq: slug },
+        languages_code: { _eq: lang },
+      },
+    },
+  },
+  limit: 1,
+}`;
+---
+
+<Layout title="Interview task – JSON block renderer">
+  <Container size="content">
+    <Stack gap="8">
+      
+      <!-- Header -->
+      <header>
+        <Stack gap="4">
+          <Stack direction="horizontal" gap="2" align="center">
+            <Badge variant="default">Interview task</Badge>
+            <Badge variant="secondary">SSR</Badge>
+            <Badge variant="outline">Directus</Badge>
+          </Stack>
+          <Heading as="h1" size="5xl">JSON block renderer</Heading>
+          <Text size="lg" color="secondary" leading="relaxed">
+            Build a block renderer that fetches content from Directus using 
+            <Code inline>slug</Code> and <Code inline>language</Code> parameters, 
+            then renders the JSON blocks as HTML server-side.
+          </Text>
+        </Stack>
+      </header>
+
+      <!-- Encouragement note -->
+      <aside class="note">
+
+        <Text color="secondary">
+          <strong>AI, questions, or Google</strong> – all encouraged. We want to see how you work and comunicate. Also if you are using AI, please let us know what model are you using and how are you prompting it.
+        </Text>
+      </aside>
+
+      <!-- Routing / Slugs -->
+      <Card>
+        <CardHeader>
+          <Heading as="h2" size="2xl">Routing</Heading>
+        </CardHeader>
+        <CardContent>
+          <Stack gap="4">
+            <Text leading="prose">
+              You'll need dynamic routes for different slugs and languages. 
+              Check <a href="https://docs.astro.build/en/guides/routing/" target="_blank" rel="noopener">Astro's routing docs</a> – 
+              patterns like <Code inline>[...slug].astro</Code> or <Code inline>[lang]/[slug].astro</Code> work well.
+            </Text>
+
+            <Text leading="prose">
+              Since we're doing SSR, pages fetch content on each request. 
+              If you use React components, remember that 
+              <a href="https://docs.astro.build/en/guides/integrations-guide/react/" target="_blank" rel="noopener">only components with <Code inline>client:*</Code> directives</a> hydrate 
+              on the client – everything else is static HTML.
+            </Text>
+          </Stack>
+        </CardContent>
+      </Card>
+
+      <!-- Block renderer -->
+      <Card>
+        <CardHeader>
+          <Heading as="h2" size="2xl">The block renderer</Heading>
+        </CardHeader>
+        <CardContent>
+          <Stack gap="6">
+            <Text leading="prose">
+              Content in Directus is stored as <a href="https://editorjs.io/" target="_blank" rel="noopener">Editor.js</a> blocks. 
+              Your job is to create a renderer that takes these blocks and outputs semantic HTML.
+            </Text>
+            
+            <Stack gap="3">
+              <Heading as="h3" size="xl">Standard Editor.js block types</Heading>
+              <ul class="task-list">
+                <li><Text as="span"><Code inline>paragraph</Code> – basic text, may contain inline HTML</Text></li>
+                <li><Text as="span"><Code inline>header</Code> – heading with <Code inline>text</Code> and <Code inline>level</Code></Text></li>
+                <li><Text as="span"><Code inline>list</Code> – ordered or unordered, with <Code inline>items</Code> array</Text></li>
+                <li><Text as="span"><Code inline>image</Code> – image with url, dimensions, caption</Text></li>
+                <li><Text as="span"><Code inline>quote</Code> – blockquote with text and caption</Text></li>
+                <li><Text as="span"><Code inline>code</Code> – code snippet</Text></li>
+              </ul>
+            </Stack>
+
+            <Text color="secondary" size="sm">
+              Check the actual data in Directus to see the exact structure.
+              There may be custom block types too – handle those gracefully.
+            </Text>
+          </Stack>
+        </CardContent>
+      </Card>
+
+      <!-- Fetching hint -->
+      <Card variant="outlined">
+        <CardHeader>
+          <Heading as="h2" size="2xl">Fetching hint</Heading>
+        </CardHeader>
+        <CardContent>
+          <Stack gap="5">
+            <Text leading="prose">
+              When querying translations, you'll need <Code inline>filter</Code> to match the slug and language, 
+              and <Code inline>deep</Code> to filter the nested translations (otherwise you get all of them).
+            </Text>
+
+            <CodeBlock language="javascript" filename="query params">
+              <code>{queryExample}</code>
+            </CodeBlock>
+
+            <Text color="secondary" size="sm">
+              Use <Code inline>fields</Code> to specify exactly what you need back.
+            </Text>
+          </Stack>
+        </CardContent>
+      </Card>
+
+      <!-- Style approach -->
+      <Card>
+        <CardHeader>
+          <Heading as="h2" size="2xl">Styling notes</Heading>
+        </CardHeader>
+        <CardContent>
+          <Stack gap="4">
+            <Text leading="prose">
+              We like BEM for naming – not required, but keeps things predictable. 
+              Something like <Code inline>.block-renderer__paragraph</Code> or <Code inline>.header--level-2</Code>.
+            </Text>
+
+            <Text leading="prose">
+              Keep components stateless where possible. CSS should describe what something 
+              <em>is</em>, not what it <em>does</em>.
+            </Text>
+
+            <Text color="secondary" size="sm">
+              Design tokens are in <Code inline>tokens.scss</Code> – spacing, colors, typography.
+            </Text>
+          </Stack>
+        </CardContent>
+        <CardFooter>
+          <Text size="sm" color="tertiary">
+            We tend to prefer small, independent components – one file per block type is a reasonable starting point, 
+            but use your judgment.
+          </Text>
+        </CardFooter>
+      </Card>
+
+    </Stack>
+  </Container>
+</Layout>
+
+<style>
+  .task-list {
+    margin: 0;
+    padding-inline-start: var(--space-5);
+    
+    li {
+      margin-block-end: var(--space-2);
+      padding-inline-start: var(--space-2);
+      
+      &::marker {
+        color: var(--color-accent-500);
+      }
+    }
+  }
+
+  a {
+    color: var(--text-link);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    transition: color var(--transition-fast);
+    
+    &:hover {
+      color: var(--text-link-hover);
+    }
+  }
+</style>
