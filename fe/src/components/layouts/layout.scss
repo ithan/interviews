@@ -7,11 +7,7 @@
   line-height: var(--leading-normal);
   
   &__main {
-    padding-block: var(--space-12);
-    
-    @media (min-width: 768px) {
-      padding-block: var(--space-16);
-    }
+    padding-block: clamp(var(--space-8), 5vw, var(--space-16));
   }
 }
 

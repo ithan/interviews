@@ -40,6 +40,22 @@ services:
       com.interview.description: "PostgreSQL database for Interviews"
       com.interview.environment: "development"
       com.interview.service: "database"
+    # Modern security hardening
+    # Note: PostgreSQL entrypoint needs root for initial setup, then drops to 'postgres' user
+    # The postgres process itself runs as non-root (postgres user)
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    cap_add:
+      - CHOWN
+      - SETUID
+      - SETGID
+      - DAC_OVERRIDE
+      - FOWNER
+    tmpfs:
+      - /tmp:noexec,nosuid,nodev,size=64m
+      - /run:noexec,nosuid,nodev,size=64m
 
 volumes:
   postgres_data:

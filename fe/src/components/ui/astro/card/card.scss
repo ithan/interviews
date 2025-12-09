@@ -1,5 +1,5 @@
 .card {
-  --_card-padding: var(--card-padding);
+  --_card-padding: clamp(var(--space-4), 4vw, var(--card-padding));
   --_card-radius: var(--card-radius);
   --_card-bg: var(--surface-card);
   

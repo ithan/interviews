@@ -32,6 +32,19 @@ services:
       com.interview.description: "KeyDB cache for Interviews"
       com.interview.environment: "development"
       com.interview.service: "cache"
+    # Modern security hardening
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    cap_add:
+      - SETGID
+      - SETUID
+      - CHOWN
+      - DAC_OVERRIDE
+    read_only: true
+    tmpfs:
+      - /tmp:noexec,nosuid,nodev,size=64m
 
 volumes:
   keydb_data:

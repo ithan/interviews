@@ -1,6 +1,8 @@
 services:
   mailhog:
-    image: mailhog/mailhog:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
     container_name: interview_mailhog
     ports:
       - "${MAILHOG_SMTP_PORT:-1025}:1025"
@@ -21,6 +23,15 @@ services:
       com.interview.description: "MailHog SMTP server for Interviews"
       com.interview.environment: "development"
       com.interview.service: "mail"
+    # Modern security hardening
+    # Note: Custom Dockerfile runs MailHog as non-root 'mailhog' user
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    read_only: true
+    tmpfs:
+      - /tmp:noexec,nosuid,nodev,size=64m
 
 volumes:
   mailhog_data:

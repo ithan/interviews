@@ -27,6 +27,14 @@ services:
       com.interview.description: "MinIO S3-compatible storage for Interviews"
       com.interview.environment: "development"
       com.interview.service: "storage"
+    # Modern security hardening
+    # Note: MinIO official image already runs as 'minio' user (non-root)
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    tmpfs:
+      - /tmp:noexec,nosuid,nodev,size=64m
 
   # This service will create the bucket and then exit
   createbuckets:

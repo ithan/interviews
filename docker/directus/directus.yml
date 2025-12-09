@@ -33,6 +33,19 @@ services:
       com.interview.description: "Directus CMS for Interviews"
       com.interview.environment: "development"
       com.interview.service: "cms"
+    # Modern security hardening
+    # Note: Directus official image already runs as 'node' user (UID 1000)
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    cap_add:
+      - CHOWN
+      - SETUID
+      - SETGID
+      - DAC_OVERRIDE
+    tmpfs:
+      - /tmp:noexec,nosuid,nodev,size=128m
 
 volumes:
   directus_uploads:
