@@ -108,3 +108,6 @@ No pressure to bring these up, but if they come naturally:
 ---
 
 That's it! Let us know when you're ready to start. Good luck, and have fun with it.
+
+
+## Good luck! And congrats if you found this before the interview! Nice research job :grin:
