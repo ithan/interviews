@@ -1,83 +1,110 @@
-# Directus Docker Starter
+# Interview task
 
-A ready-to-use Directus CMS setup with Docker for local development.
+Welcome! This repo has everything you need to get started. We'll be building a multilingual blog with Directus as the CMS and Astro for the frontend.
 
-## Configuration
+Don't stress – we're here to see how you work and think, not to trick you. Feel free to ask questions, use Google, or lean on AI if that's your thing.
 
-### Environment variables
-- **Documentation**: [Official Directus config options](https://docs.directus.io/self-hosted/config-options.html#file-storage)
-- **Template**: See `.env.example` for all available configuration options
+## Getting started
 
-## Development
-
-### Project structure
-
-```
-/docker - Docker files for local development services
-  /directus - Directus service configuration
-  /keydb - KeyDB (Redis-compatible) service configuration
-  /mailhog - MailHog email testing service configuration
-  /minio - MinIO S3-compatible object storage configuration
-  /postgres - PostgreSQL database configuration
-
-docker-compose.yml - Docker compose configuration for local development
-docker-compose.dev.yml - Development override with extension hot reloading
-Dockerfile - Build docker image with extensions
-```
-
-### Local development setup
-
-#### Prerequisites
-Before running the project locally, ensure that:
-- Docker and Docker Compose are installed
-- Required ports are available (check `docker-compose.yml` for specific ports)
-- No conflicting Docker networks or volumes exist
-- Container names are unique across your Docker environment
-
-#### Environment configuration
-
-##### Quick setup (recommended)
-Use the automated setup script to configure your environment with a project prefix:
+### 1. Clone and setup
 
 ```bash
+git clone <repo-url>
+cd interview
 chmod +x setup.sh
 ./setup.sh
 ```
 
-> **Windows users**: Run this script using Git Bash, WSL, or MSYS2.
+> **Windows**: Use Git Bash, WSL, or MSYS2 to run the setup script.
 
-The setup script will:
-- Prompt for a project prefix (e.g., `interview`, `myapp`)
-- Generate secure passwords for PostgreSQL, KeyDB, MinIO, and Directus
-- Update all container and volume names with your prefix
-- Create a `.env` file with all configurations populated
+The script will generate passwords and configure everything for you.
 
-##### Manual configuration
-1. **Copy the environment template**: 
-   ```bash
-   cp .env.example .env
-   ```
-2. **Edit `.env`** and configure the required variables
-3. **Ensure all Directus configuration variables are set** before starting
+### 2. Start the services
 
-#### Running the project
+```bash
+docker compose up -d
+```
 
-##### Production/testing mode (built extensions)
-For running with pre-built extensions (similar to production):
+This spins up:
+- **Directus** – headless CMS at `http://localhost:8055`
+- **PostgreSQL** – database
+- **KeyDB** – Redis-compatible cache
+- **MinIO** – file storage
+- **MailHog** – email testing
+- **Backend** – mock blog API at `http://localhost:8000`
 
-1. **Start all services**:
-   ```bash
-   docker compose up -d
-   ```
+### 3. Run the frontend
 
-2. **Verify services are running**:
-   ```bash
-   docker compose ps
-   ```
+```bash
+cd fe
+pnpm install
+pnpm dev
+```
 
-The setup should work out of the box once environment variables are properly configured. The Docker Compose configuration includes all necessary services:
-- **Directus CMS** - Main application
-- **PostgreSQL** - Database
-- **KeyDB** - Redis-compatible cache/session storage
-- **MinIO** - S3-compatible object storage for file uploads
-- **MailHog** - Email testing service for development
+The Astro dev server will be at `http://localhost:4321`.
+
+---
+
+## The task
+
+We have roughly **2 hours** together. Here's what we'd like you to build:
+
+### Part 1: Directus setup
+
+Create a blog structure in Directus that supports translations. You'll need:
+- An **articles** collection
+- A way to store **translations** with: `slug`, `title`, and `content` (JSON blocks)
+
+The goal is to be able to query an article by slug and language.
+
+### Part 2: Frontend
+
+Head to the frontend (`fe/`) and check out `src/pages/index.astro` – it has more details on what to build.
+
+In short:
+- Add directus SDK to the frontend
+- Create a dynamic route like `[locale]/[slug]`
+- Fetch the article from Directus based on the URL
+- Build a **block renderer** that turns the JSON content into HTML
+
+The content uses [Editor.js](https://editorjs.io/) block format. Handle the common types: paragraphs, headers, lists, images, quotes, code blocks.
+
+### Nice to have (only if time allows)
+
+- A page listing all posts, maybe with pagination
+- Good use of the design tokens in `tokens.scss`
+- Clean components and CSS structure (we like BEM, but use what you're comfortable with)
+- We don't like react, but we have to use it, so you can use it. Just know that components must be SSR renderable.
+
+---
+
+## Bonus round (if we have time)
+
+There's a mock blog API in the `be/` folder. If we finish early, we might:`)
+- Write a small migration script to fetch posts from the mock API and import them into Directus
+
+Check `be/README.md` for the API docs. It should already be running in docker.
+
+---
+
+## Things we might chat about
+
+No pressure to bring these up, but if they come naturally:
+- How would you index the database for fast slug lookups?
+- Where might caching help if this were a high-traffic site?
+- Any thoughts on scaling things horizontally? What would be your approach for FE? BE? DB? What about psql replication triggers (For context we use them), how would you handle them in a multi-node setup?
+
+---
+
+## Project structure
+
+```
+/fe          – Astro frontend
+/be          – Deno mock API
+/docker      – Docker service configs
+/extensions  – Directus extensions (if needed you can install them here or from directus marketplace directly)
+```
+
+---
+
+That's it! Let us know when you're ready to start. Good luck, and have fun with it.
