@@ -1,151 +1,182 @@
-# Nightmare WordPress Blog API
+# Blog API
 
-A deliberately over-complicated blog API that simulates a legacy WordPress database structure where you need multiple API calls to get basic blog post data.
+Multilingual blog API with simple HTML content.
 
-## Quick Start
+## Environment Variables
 
-```bash
-# 1. Seed the database (creates 200 posts)
-deno task seed
+| Variable | Default | Description |
+|----------|---------|-------------|
+| `BE_PORT` | `8000` | Server port |
+| `DB_PATH` | `blog.db` | SQLite database path |
 
-# 2. Start the server
-deno task dev
+---
+
+## API Reference
+
+Base URL: `http://localhost:8000`
+
+### Response Format
+
+All responses follow this structure:
+
+**Success Response**
+```typescript
+{
+  success: true,
+  data: T,  // Response data (type depends on endpoint)
+  meta: {
+    timestamp: string,  // ISO 8601
+    request_id: string  // UUID
+  }
+}
 ```
 
-Server will be available at `http://localhost:8000`
+**Error Response**
+```typescript
+{
+  success: false,
+  error: {
+    code: string,      // e.g. "NOT_FOUND", "INVALID_LANGUAGE"
+    message: string,
+    details?: unknown
+  },
+  meta: {
+    timestamp: string,
+    request_id: string
+  }
+}
+```
 
-## Tasks
+**Paginated Response**
+```typescript
+{
+  success: true,
+  data: T[],
+  pagination: {
+    page: number,
+    per_page: number,
+    total: number,
+    total_pages: number
+  },
+  meta: {
+    timestamp: string,
+    request_id: string
+  }
+}
+```
 
-| Command | Description |
-|---------|-------------|
-| `deno task seed` | Initialize database and seed with 200 mock posts |
-| `deno task dev` | Start server with watch mode |
-| `deno task start` | Start server (production) |
-| `deno task init-db` | Initialize empty database (no data) |
+---
 
-## API Endpoints
+## Endpoints
 
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| GET | `/docs` | Swagger UI documentation |
-| GET | `/openapi.json` | OpenAPI 3.0 specification |
-| GET | `/api/v1/posts` | List posts (paginated, 20/page) |
-| GET | `/api/v1/post-meta/:id` | Get post metadata |
-| GET | `/api/v1/content/:refId` | Get post HTML content |
-| GET | `/api/v1/translations/group/:groupId` | Get translation group |
-| GET | `/api/v1/translations/content/:postId/:lang` | Get translated content |
+### `GET /api/v1/posts`
 
-## The Challenge
+List all posts with available translations.
 
-To get a complete blog post with all its data, you need to make **4+ API calls**:
+**Parameters**
+
+| Name | In | Type | Default | Description |
+|------|-----|------|---------|-------------|
+| `page` | query | integer | 1 | Page number (1-indexed) |
+| `per_page` | query | integer | 20 | Items per page (max 100) |
+
+**Response: `PaginatedResponse<PostMeta>`**
+
+---
+
+### `GET /api/v1/post-meta/{id}`
+
+Get post metadata including all available translations.
+
+**Parameters**
+
+| Name | In | Type | Description |
+|------|-----|------|-------------|
+| `id` | path | integer | Post ID |
+
+**Response: `ApiResponse<PostMeta>`**
+
+Use `available_translations[].language` to know which languages are available, then fetch content via `/api/v1/translations/content/{id}/{language}`.
+
+**Errors**
+- `404` - Post not found
+
+---
+
+### `GET /api/v1/translations/content/{postId}/{language}`
+
+Get translated title and HTML content for a specific language.
+
+**Parameters**
+
+| Name | In | Type | Description |
+|------|-----|------|-------------|
+| `postId` | path | integer | Post ID |
+| `language` | path | string | Language code |
+
+**Response: `ApiResponse<TranslatedContent>`**
+
+**Errors**
+- `400` - Invalid language code
+- `404` - Translation not found for this post/language
+
+---
+
+## Types
+
+### `Language`
 
 ```typescript
-// Step 1: Get post meta to find content_reference_id and translation_group_id
-const meta = await fetch(`/api/v1/post-meta/1`);
-
-// Step 2: Get content using content_reference_id
-const content = await fetch(`/api/v1/content/${meta.content_reference_id}`);
-
-// Step 3: Get translation group to find titles for all languages
-const translations = await fetch(`/api/v1/translations/group/${meta.translation_group_id}`);
-
-// Step 4: Get translated content for each language
-const translatedContent = await fetch(`/api/v1/translations/content/1/en`);
+type Language = "en" | "fr" | "de" | "es" | "it" | "cs" | "pl" | "jp";
 ```
 
-## Data Structure
+### `PostMeta`
 
-- **200 posts** (10 pages × 20 posts per page)
-- Multiple translations per post (en + 1-4 other languages)
-- **Simple HTML content** - only these tags:
-  - `<p>` paragraphs
-  - `<h2>`, `<h3>`, `<h4>` headings
-  - `<ul>` / `<li>` lists
-
-## HTML to JSON Blocks
-
-The HTML content is intentionally simple (1 depth only) for easy transformation:
-
-**Input HTML:**
-```html
-<h2>Getting Started</h2>
-<p>Lorem ipsum dolor sit amet.</p>
-<ul>
-  <li>First item</li>
-  <li>Second item</li>
-</ul>
+```typescript
+interface PostMeta {
+  id: number;
+  slug: string;
+  author_id: number;
+  status: "published" | "draft" | "archived";
+  created_at: string;           // ISO 8601
+  updated_at: string;           // ISO 8601
+  category_ids: number[];
+  featured_image_id?: number;
+  default_language: Language;
+  available_translations: TranslationInfo[];
+}
 ```
 
-## Supported Languages
+### `TranslationInfo`
 
-| Code | Language |
-|------|----------|
-| `en` | English (default) |
-| `fr` | French |
-| `de` | German |
-| `es` | Spanish |
-| `it` | Italian |
-| `cs` | Czech |
-| `pl` | Polish |
-| `jp` | Japanese |
-
-## Project Structure
-
-```
-be/
-├── deno.json           # Deno configuration
-├── server.ts           # Main server entry point
-├── mod.ts              # Main exports
-├── openapi.ts          # OpenAPI specification
-├── db/
-│   ├── connection.ts   # Database connection
-│   ├── schema.ts       # SQL schema
-│   └── queries/        # One query per file
-│       ├── get-post-meta.ts
-│       ├── get-content.ts
-│       ├── get-translation-group.ts
-│       ├── get-translated-content.ts
-│       └── list-posts.ts
-├── routes/             # Route handlers
-│   ├── post-meta.ts
-│   ├── content.ts
-│   ├── translation-group.ts
-│   ├── translated-content.ts
-│   └── list-posts.ts
-├── scripts/
-│   ├── init-db.ts      # Database initialization
-│   └── seed.ts         # Data seeding
-├── types/
-│   └── api.ts          # TypeScript types
-└── utils/
-    ├── response.ts     # API response helpers
-    └── generate-mock.ts # Mock data generation
+```typescript
+interface TranslationInfo {
+  language: Language;
+  post_id: number;              // Use this to fetch content
+  title: string;
+  translation_status: "complete" | "partial" | "machine";
+}
 ```
 
-## Example Responses
+### `TranslatedContent`
 
-### List Posts
-```bash
-curl http://localhost:8000/api/v1/posts?page=1&per_page=20
+```typescript
+interface TranslatedContent {
+  post_id: number;
+  language: Language;
+  title: string;
+  html_content: string;         // Simple HTML: <p>, <h2>, <h3>, <ul>, <li>
+  excerpt?: string;
+  word_count: number;
+  translation_status: "complete" | "partial" | "machine";
+  uses_fallback: boolean;
+}
 ```
 
-### Get Post Meta
-```bash
-curl http://localhost:8000/api/v1/post-meta/1
-```
+---
 
-### Get Content
-```bash
-curl http://localhost:8000/api/v1/content/<content_reference_id>
-```
+## OpenAPI
 
-### Get Translation Group
-```bash
-curl http://localhost:8000/api/v1/translations/group/<translation_group_id>
-```
+Interactive documentation available at `/docs`
 
-### Get Translated Content
-```bash
-curl http://localhost:8000/api/v1/translations/content/1/en
-```
-
+OpenAPI 3.0 spec available at `/openapi.json`

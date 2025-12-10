@@ -6,7 +6,18 @@ export type Language = "en" | "fr" | "de" | "es" | "it" | "cs" | "pl" | "jp";
 export const LANGUAGES: Language[] = ["en", "fr", "de", "es", "it", "cs", "pl", "jp"];
 
 /**
+ * Translation info for a post
+ */
+export interface TranslationInfo {
+  language: Language;
+  post_id: number;
+  title: string;
+  translation_status: "complete" | "partial" | "machine";
+}
+
+/**
  * POST META ENDPOINT: /api/v1/post-meta/{id}
+ * Contains post metadata AND available translations
  */
 export interface PostMeta {
   id: number;
@@ -15,52 +26,52 @@ export interface PostMeta {
   status: "published" | "draft" | "archived";
   created_at: string;
   updated_at: string;
-  content_reference_id: string;
-  translation_group_id: string;
   category_ids: number[];
   featured_image_id?: number;
+  default_language: Language;
+  available_translations: TranslationInfo[];
 }
 
 /**
- * CONTENT ENDPOINT: /api/v1/content/{content_reference_id}
+ * TRANSLATED CONTENT ENDPOINT: /api/v1/translations/content/{post_id}/{language}
+ * Contains title AND translated HTML content
  */
-export interface PostContent {
-  reference_id: string;
-  html_body: string;
+export interface TranslatedContent {
+  post_id: number;
+  language: Language;
+  title: string;
+  html_content: string;
   excerpt?: string;
   word_count: number;
-  last_modified: string;
-  revision_number: number;
+  translation_status: "complete" | "partial" | "machine";
+  uses_fallback: boolean;
 }
 
 /**
- * TRANSLATION GROUP ENDPOINT: /api/v1/translations/group/{translation_group_id}
+ * The final shape for a complete blog post
  */
-export interface TranslationGroup {
-  group_id: string;
-  default_language: Language;
+export interface BlogPostData {
+  slug: string;
+  title: string;
+  content: string;
+  language: Language;
   translations: {
     [K in Language]?: {
-      post_id: number;
+      slug: string;
       title: string;
-      meta_description?: string;
-      locale_specific_slug?: string;
-      translation_status: "complete" | "partial" | "machine" | "missing";
-      translated_by?: string;
-      translated_at?: string;
+      content: string;
     };
   };
 }
 
 /**
- * TRANSLATION CONTENT ENDPOINT: /api/v1/translations/content/{post_id}/{language}
+ * Helper type for JSON blocks conversion
  */
-export interface TranslatedContent {
-  post_id: number;
-  language: Language;
-  translated_html: string;
-  translation_quality_score?: number;
-  uses_fallback: boolean;
+export interface JsonBlock {
+  type: "paragraph" | "heading" | "list";
+  content: string;
+  attributes?: Record<string, unknown>;
+  children?: JsonBlock[];
 }
 
 /**
@@ -108,4 +119,3 @@ export interface PaginatedResponse<T> {
     request_id: string;
   };
 }
-

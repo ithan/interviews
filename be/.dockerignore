@@ -1,0 +1,22 @@
+# Lock file (may be incompatible with Docker image Deno version)
+deno.lock
+
+# Database files
+*.db
+*.db-journal
+
+# IDE
+.vscode/
+.idea/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Git
+.git/
+.gitignore
+
+# Documentation
+README.md
+

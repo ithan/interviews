@@ -1,0 +1,43 @@
+services:
+  backend:
+    build:
+      context: ../../be
+      dockerfile: Dockerfile
+    container_name: interview_backend
+    env_file:
+      - ../../.env
+    environment:
+      BE_PORT: ${BE_PORT:-8000}
+      DB_PATH: /app/data/blog.db
+    volumes:
+      - backend_data:/app/data
+    ports:
+      - "${BE_PORT:-8000}:${BE_PORT:-8000}"
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "deno", "eval", "const r = await fetch('http://localhost:${BE_PORT:-8000}/api/v1/posts?page=1&per_page=1'); if (!r.ok) Deno.exit(1);"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+    labels:
+      com.interview.description: "Nightmare WordPress Blog API for Interviews"
+      com.interview.environment: "development"
+      com.interview.service: "backend"
+    # Modern security hardening
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    tmpfs:
+      - /tmp:noexec,nosuid,nodev,size=64m
+
+volumes:
+  backend_data:
+    name: interview_backend_data
+

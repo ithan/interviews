@@ -4,3 +4,4 @@ include:
   - ./docker/minio/minio.yml
   - ./docker/mailhog/mailhog.yml
   - ./docker/directus/directus.yml
+  - ./docker/backend/backend.yml

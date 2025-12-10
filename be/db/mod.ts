@@ -1,3 +1,3 @@
-export { getDb, closeDb } from "./connection.ts";
+export { getDb, closeDb, getDbPath } from "./connection.ts";
 export { SCHEMA } from "./schema.ts";
 

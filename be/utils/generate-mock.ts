@@ -1,36 +1,27 @@
 import { LANGUAGES, type Language } from "../types/mod.ts";
 
-const TITLES_EN = [
-  "Getting Started with TypeScript",
-  "Understanding React Hooks",
-  "Building REST APIs",
-  "CSS Grid Layout Guide",
-  "JavaScript Best Practices",
-  "Database Design Patterns",
-  "Authentication Methods",
-  "Performance Optimization",
-  "Testing Strategies",
-  "DevOps Fundamentals",
-  "Cloud Architecture",
-  "Microservices Explained",
-  "GraphQL vs REST",
-  "State Management",
-  "Security Guidelines",
+// More realistic blog post titles
+const TITLES = [
+  "Getting Started with TypeScript in 2024",
+  "A Complete Guide to React Hooks",
+  "Building Scalable REST APIs",
+  "Mastering CSS Grid Layout",
+  "JavaScript Performance Tips",
+  "Database Design Best Practices",
+  "Modern Authentication Methods",
+  "Web Performance Optimization",
+  "Unit Testing Strategies",
+  "Introduction to DevOps",
+  "Cloud Architecture Patterns",
+  "Microservices vs Monoliths",
+  "GraphQL Fundamentals",
+  "State Management in React",
+  "Web Security Guidelines",
   "API Design Principles",
-  "Code Review Tips",
-  "Debugging Techniques",
-  "Deployment Strategies",
+  "Effective Code Reviews",
+  "Debugging Like a Pro",
+  "CI/CD Pipeline Setup",
   "Monitoring and Logging",
-];
-
-const WORDS = [
-  "lorem", "ipsum", "dolor", "sit", "amet", "consectetur", "adipiscing", "elit",
-  "sed", "do", "eiusmod", "tempor", "incididunt", "labore", "dolore", "magna",
-  "aliqua", "enim", "minim", "veniam", "quis", "nostrud", "exercitation",
-  "ullamco", "laboris", "nisi", "aliquip", "commodo", "consequat", "duis",
-  "aute", "irure", "reprehenderit", "voluptate", "velit", "esse", "cillum",
-  "fugiat", "nulla", "pariatur", "excepteur", "sint", "occaecat", "cupidatat",
-  "proident", "sunt", "culpa", "officia", "deserunt", "mollit", "anim",
 ];
 
 /**
@@ -48,47 +39,71 @@ export function randomPick<T>(arr: T[]): T {
 }
 
 /**
- * Generate a random sentence
+ * Generate lorem ipsum paragraph
  */
-export function generateSentence(wordCount: number): string {
-  const words = Array.from({ length: wordCount }, () => randomPick(WORDS));
-  words[0] = words[0].charAt(0).toUpperCase() + words[0].slice(1);
-  return words.join(" ") + ".";
-}
-
-/**
- * Generate a random paragraph
- */
-export function generateParagraph(): string {
-  const sentenceCount = randomInt(3, 6);
-  return Array.from({ length: sentenceCount }, () => generateSentence(randomInt(8, 15))).join(" ");
+function loremParagraph(): string {
+  const sentences = [
+    "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+    "Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+    "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.",
+    "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore.",
+    "Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia.",
+    "Nulla pariatur excepteur sint occaecat cupidatat non proident.",
+    "Sed ut perspiciatis unde omnis iste natus error sit voluptatem.",
+    "Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit.",
+  ];
+  const count = randomInt(3, 5);
+  return Array.from({ length: count }, () => randomPick(sentences)).join(" ");
 }
 
 /**
  * Generate simple HTML content (1 depth only)
- * Only paragraphs, lists, or headings - easy to transform
+ * Only paragraphs, lists, or headings - easy to transform to JSON blocks
  */
 export function generateSimpleHtml(): string {
   const blocks: string[] = [];
-  const blockCount = randomInt(3, 7);
+  const blockCount = randomInt(4, 8);
 
   for (let i = 0; i < blockCount; i++) {
-    const blockType = randomPick(["paragraph", "heading", "list"]);
+    const blockType = randomPick(["paragraph", "paragraph", "heading", "list"]);
 
     switch (blockType) {
       case "paragraph":
-        blocks.push(`<p>${generateParagraph()}</p>`);
+        blocks.push(`<p>${loremParagraph()}</p>`);
         break;
       case "heading": {
-        const level = randomPick([2, 3, 4]);
-        const text = generateSentence(randomInt(3, 6)).replace(".", "");
-        blocks.push(`<h${level}>${text}</h${level}>`);
+        const level = randomPick([2, 3]);
+        const headings = [
+          "Introduction",
+          "Getting Started",
+          "Key Concepts",
+          "Implementation",
+          "Best Practices",
+          "Common Pitfalls",
+          "Advanced Topics",
+          "Conclusion",
+          "Next Steps",
+          "Summary",
+        ];
+        blocks.push(`<h${level}>${randomPick(headings)}</h${level}>`);
         break;
       }
       case "list": {
         const itemCount = randomInt(3, 5);
+        const listItems = [
+          "Configure your development environment",
+          "Install required dependencies",
+          "Create the project structure",
+          "Write unit tests first",
+          "Document your code thoroughly",
+          "Use version control effectively",
+          "Review code before merging",
+          "Monitor performance metrics",
+          "Handle errors gracefully",
+          "Optimize for production",
+        ];
         const items = Array.from({ length: itemCount }, () =>
-          `<li>${generateSentence(randomInt(5, 10))}</li>`
+          `<li>${randomPick(listItems)}</li>`
         ).join("");
         blocks.push(`<ul>${items}</ul>`);
         break;
@@ -103,37 +118,112 @@ export function generateSimpleHtml(): string {
  * Generate a title for a given index
  */
 export function generateTitle(index: number): string {
-  const baseTitle = TITLES_EN[index % TITLES_EN.length];
-  const suffix = Math.floor(index / TITLES_EN.length);
-  return suffix > 0 ? `${baseTitle} Part ${suffix + 1}` : baseTitle;
+  return TITLES[index % TITLES.length];
 }
 
 /**
  * Generate a slug from a title
  */
-export function generateSlug(title: string): string {
-  return title
+export function generateSlug(title: string, index: number): string {
+  const base = title
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/^-|-$/g, "");
+  return `${base}-${index}`;
 }
 
 /**
- * Translate text to a mock version (just prefix with language code)
+ * Translate title to a mock version for different languages
  */
-export function mockTranslate(text: string, lang: Language): string {
-  if (lang === "en") return text;
-  const prefixes: Record<Language, string> = {
-    en: "",
-    fr: "[FR] ",
-    de: "[DE] ",
-    es: "[ES] ",
-    it: "[IT] ",
-    cs: "[CS] ",
-    pl: "[PL] ",
-    jp: "[JP] ",
+export function translateTitle(title: string, lang: Language): string {
+  if (lang === "en") return title;
+  
+  const translations: Record<Language, Record<string, string>> = {
+    en: {},
+    fr: {
+      "Getting Started": "Commencer",
+      "A Complete Guide": "Guide Complet",
+      "Building": "Construction de",
+      "Mastering": "Maîtriser",
+      "Introduction to": "Introduction à",
+      "Modern": "Moderne",
+      "Web": "Web",
+      "Best Practices": "Meilleures Pratiques",
+    },
+    de: {
+      "Getting Started": "Erste Schritte",
+      "A Complete Guide": "Vollständiger Leitfaden",
+      "Building": "Aufbau von",
+      "Mastering": "Beherrschen",
+      "Introduction to": "Einführung in",
+      "Modern": "Modern",
+      "Web": "Web",
+      "Best Practices": "Best Practices",
+    },
+    es: {
+      "Getting Started": "Comenzando",
+      "A Complete Guide": "Guía Completa",
+      "Building": "Construcción de",
+      "Mastering": "Dominando",
+      "Introduction to": "Introducción a",
+      "Modern": "Moderno",
+      "Web": "Web",
+      "Best Practices": "Mejores Prácticas",
+    },
+    it: {
+      "Getting Started": "Iniziare",
+      "A Complete Guide": "Guida Completa",
+      "Building": "Costruzione di",
+      "Mastering": "Padroneggiare",
+      "Introduction to": "Introduzione a",
+      "Modern": "Moderno",
+      "Web": "Web",
+      "Best Practices": "Best Practice",
+    },
+    cs: {
+      "Getting Started": "Začínáme",
+      "A Complete Guide": "Kompletní Průvodce",
+      "Building": "Budování",
+      "Mastering": "Ovládnutí",
+      "Introduction to": "Úvod do",
+      "Modern": "Moderní",
+      "Web": "Web",
+      "Best Practices": "Osvědčené Postupy",
+    },
+    pl: {
+      "Getting Started": "Rozpoczęcie",
+      "A Complete Guide": "Kompletny Przewodnik",
+      "Building": "Budowanie",
+      "Mastering": "Opanowanie",
+      "Introduction to": "Wprowadzenie do",
+      "Modern": "Nowoczesny",
+      "Web": "Web",
+      "Best Practices": "Najlepsze Praktyki",
+    },
+    jp: {
+      "Getting Started": "はじめに",
+      "A Complete Guide": "完全ガイド",
+      "Building": "構築",
+      "Mastering": "マスター",
+      "Introduction to": "入門",
+      "Modern": "モダン",
+      "Web": "ウェブ",
+      "Best Practices": "ベストプラクティス",
+    },
   };
-  return prefixes[lang] + text;
+
+  let translated = title;
+  const langTrans = translations[lang];
+  for (const [eng, trans] of Object.entries(langTrans)) {
+    translated = translated.replace(eng, trans);
+  }
+  
+  // If no translation found, prefix with language code
+  if (translated === title) {
+    return `[${lang.toUpperCase()}] ${title}`;
+  }
+  
+  return translated;
 }
 
 /**
@@ -154,12 +244,11 @@ export function generateUuid(): string {
 }
 
 /**
- * Get random languages for a post (always includes 'en')
+ * Get random languages for a post (always includes 'en' first)
  */
 export function getRandomLanguages(): Language[] {
   const otherLangs = LANGUAGES.filter((l) => l !== "en");
-  const count = randomInt(1, 4);
+  const count = randomInt(2, 5);
   const shuffled = otherLangs.sort(() => Math.random() - 0.5);
   return ["en" as Language, ...shuffled.slice(0, count)];
 }
-

@@ -1,7 +1,5 @@
 import {
   handleGetPostMeta,
-  handleGetContent,
-  handleGetTranslationGroup,
   handleGetTranslatedContent,
   handleListPosts,
 } from "./routes/mod.ts";
@@ -9,7 +7,7 @@ import { errorResponse, json } from "./utils/mod.ts";
 import { openApiSpec } from "./openapi.ts";
 import { closeDb } from "./db/mod.ts";
 
-const PORT = 8000;
+const PORT = parseInt(Deno.env.get("BE_PORT") ?? "8000", 10);
 
 /**
  * Simple router
@@ -58,18 +56,6 @@ function router(req: Request): Response {
     return handleGetPostMeta(id);
   }
 
-  // GET /api/v1/content/:referenceId
-  const contentMatch = path.match(/^\/api\/v1\/content\/([a-f0-9-]+)$/);
-  if (contentMatch) {
-    return handleGetContent(contentMatch[1]);
-  }
-
-  // GET /api/v1/translations/group/:groupId
-  const translationGroupMatch = path.match(/^\/api\/v1\/translations\/group\/([a-f0-9-]+)$/);
-  if (translationGroupMatch) {
-    return handleGetTranslationGroup(translationGroupMatch[1]);
-  }
-
   // GET /api/v1/translations/content/:postId/:language
   const translatedContentMatch = path.match(/^\/api\/v1\/translations\/content\/(\d+)\/(\w+)$/);
   if (translatedContentMatch) {
@@ -91,7 +77,7 @@ function getDocsHtml(): string {
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Nightmare WordPress Blog API</title>
+  <title>Blog API</title>
   <link rel="stylesheet" href="https://unpkg.com/swagger-ui-dist@5/swagger-ui.css">
   <style>
     body { margin: 0; padding: 0; }
@@ -131,20 +117,16 @@ function handler(req: Request): Response {
 // Start server
 console.log(`
 ╔══════════════════════════════════════════════════════════════╗
-║         🌐 Nightmare WordPress Blog API                      ║
+║              🌐 Blog API Server                              ║
 ╠══════════════════════════════════════════════════════════════╣
 ║  Server running at: http://localhost:${PORT}                    ║
 ║  API Documentation: http://localhost:${PORT}/docs               ║
-║  OpenAPI Spec:      http://localhost:${PORT}/openapi.json       ║
 ╠══════════════════════════════════════════════════════════════╣
-║  Available Endpoints:                                        ║
+║  Endpoints:                                                  ║
 ║  ────────────────────────────────────────────────────────────║
 ║  GET /api/v1/posts                   List posts (paginated)  ║
-║  GET /api/v1/post-meta/:id           Get post metadata       ║
-║  GET /api/v1/content/:refId          Get post content        ║
-║  GET /api/v1/translations/group/:id  Get translation group   ║
-║  GET /api/v1/translations/content/:id/:lang                  ║
-║                                      Get translated content  ║
+║  GET /api/v1/post-meta/:id           Get post + translations ║
+║  GET /api/v1/translations/content/:id/:lang  Get content     ║
 ╚══════════════════════════════════════════════════════════════╝
 `);
 
@@ -156,4 +138,3 @@ Deno.addSignalListener("SIGINT", () => {
 });
 
 Deno.serve({ port: PORT }, handler);
-
