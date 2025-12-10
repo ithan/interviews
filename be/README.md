@@ -165,7 +165,7 @@ interface TranslatedContent {
   post_id: number;
   language: Language;
   title: string;
-  html_content: string;         // Simple HTML: <p>, <h2>, <h3>, <ul>, <li>
+  html_content: string;         // Simple HTML: <p>, <h2>, <h3>, <ul>, <li>, also you may need to handle text outside any tag like: [demo] <p> lorem ipsum </p> <ul> <li> item 1 </li> <li> item 2 </li> </ul>
   excerpt?: string;
   word_count: number;
   translation_status: "complete" | "partial" | "machine";
