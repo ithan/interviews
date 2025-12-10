@@ -2,7 +2,7 @@
 
 Multilingual blog API with simple HTML content.
 
-## Environment Variables
+## Environment variables
 
 | Variable | Default | Description |
 |----------|---------|-------------|
@@ -11,15 +11,15 @@ Multilingual blog API with simple HTML content.
 
 ---
 
-## API Reference
+## API reference
 
 Base URL: `http://localhost:8000`
 
-### Response Format
+### Response format
 
 All responses follow this structure:
 
-**Success Response**
+**Success response**
 ```typescript
 {
   success: true,
@@ -31,7 +31,7 @@ All responses follow this structure:
 }
 ```
 
-**Error Response**
+**Error response**
 ```typescript
 {
   success: false,
@@ -47,7 +47,7 @@ All responses follow this structure:
 }
 ```
 
-**Paginated Response**
+**Paginated response**
 ```typescript
 {
   success: true,

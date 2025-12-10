@@ -8,19 +8,19 @@ export const openApiSpec = {
     description: `
 A multilingual blog API with simple HTML content.
 
-## API Flow
+## API flow
 
 1. **List posts** - Get paginated posts with available translations
 2. **Get post meta** - Get detailed metadata including all available translations  
 3. **Get translated content** - Get title and HTML content for a specific language
 
-## Data Structure
+## Data structure
 
 - 200 posts (10 pages × 20 posts/page)
 - 3-6 translations per post
 - Simple HTML content (paragraphs, headings, lists only)
 
-## HTML Content
+## HTML content
 
 The HTML content uses only these tags for easy transformation to JSON blocks:
 - \`<p>\` - paragraphs

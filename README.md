@@ -4,13 +4,13 @@ A ready-to-use Directus CMS setup with Docker for local development.
 
 ## Configuration
 
-### Environment Variables
+### Environment variables
 - **Documentation**: [Official Directus config options](https://docs.directus.io/self-hosted/config-options.html#file-storage)
 - **Template**: See `.env.example` for all available configuration options
 
 ## Development
 
-### Project Structure
+### Project structure
 
 ```
 /docker - Docker files for local development services
@@ -25,7 +25,7 @@ docker-compose.dev.yml - Development override with extension hot reloading
 Dockerfile - Build docker image with extensions
 ```
 
-### Local Development Setup
+### Local development setup
 
 #### Prerequisites
 Before running the project locally, ensure that:
@@ -34,9 +34,9 @@ Before running the project locally, ensure that:
 - No conflicting Docker networks or volumes exist
 - Container names are unique across your Docker environment
 
-#### Environment Configuration
+#### Environment configuration
 
-##### Quick Setup (Recommended)
+##### Quick setup (recommended)
 Use the automated setup script to configure your environment with a project prefix:
 
 ```bash
@@ -52,7 +52,7 @@ The setup script will:
 - Update all container and volume names with your prefix
 - Create a `.env` file with all configurations populated
 
-##### Manual Configuration
+##### Manual configuration
 1. **Copy the environment template**: 
    ```bash
    cp .env.example .env
@@ -60,9 +60,9 @@ The setup script will:
 2. **Edit `.env`** and configure the required variables
 3. **Ensure all Directus configuration variables are set** before starting
 
-#### Running the Project
+#### Running the project
 
-##### Production/Testing Mode (Built Extensions)
+##### Production/testing mode (built extensions)
 For running with pre-built extensions (similar to production):
 
 1. **Start all services**:
